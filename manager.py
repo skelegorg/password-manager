@@ -13,7 +13,7 @@ def accessPasswords():
 def getPassword():
     # open file containing master password
     masterPasswordFile = open(
-        "C:/Users/cummi_bdpdp6n/password-manager/masterPassword.txt", "r")
+        "C:\Program Files\password-manager\masterPassword.txt", "r")
     # saves the password temporarily
     masterPass = masterPasswordFile.read()
     masterPasswordFile.close()
