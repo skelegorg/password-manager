@@ -13,7 +13,7 @@ def accessPasswords():
 def getPassword():
     # open file containing master password
     masterPasswordFile = open(
-        "C:/Users/cummi_bdpdp6n/Documents/password-manager/masterPassword.txt", "r")
+        "masterPassword.txt", "r")
     # saves the password temporarily
     masterPass = masterPasswordFile.read()
     masterPasswordFile.close()
@@ -34,7 +34,7 @@ def getPassword():
         # password does not exist, so create a password
         # open the password file up in write mode
         masterPasswordFile = open(
-            "C:/Users/cummi_bdpdp6n/Documents/password-manager/masterPassword.txt", "w")
+            "masterPassword.txt", "w")
         # get the user to input their password 2x for security
         newPass1 = input("What would you like your password to be?\n")
         newPass2 = input("Confirm your password:")
