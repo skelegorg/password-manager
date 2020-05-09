@@ -1,12 +1,56 @@
 # password manager
 
+
+def readPassword():
+    # get the name of the password
+    # serviceFile = open("serviceFile.txt", "r")
+    # passToFind = input("Which password do you want to obtain?")
+
+
+def savePassword():
+    # open the files required
+    serviceFile = open("serviceFile.txt", "a")
+    passwordFile = open("passwordFile.txt", "a")
+    # get the name and value of the password
+    serviceName = input("What is the service?")
+    passwordValue1 = input("What is your password?")
+    passwordValue2 = input("Confirm your password:")
+    if (passwordValue1 == passwordValue2):
+        # nomial path: saves the service name in one file
+        serviceFile.write(serviceName)
+        # saves the password in the other file
+        passwordFile.write(passwordValue1)
+        # resets variables to empty strings
+        passwordValue1 = ''
+        passwrodValue2 = ''
+        # close both files
+        serviceFile.close()
+        passwordFile.close()
+        # print success message
+        print("Password successfully stored")
+    else:
+        # irregular path: starts over
+        serviceFile.close()
+        passwordFile.close()
+        savePassword()
+
+
+def deletePassword():
+    # get name of the password
+    print("delet")
+
 # password access - only called if the user passes the getPassword function.
 
 
 def accessPasswords():
-    # for testing purposes
-    print("hello, world!")
-
+    userInput = input(
+        "Would you like to store (s) a password, read (r) a password, or remove (d) a password from the system?")
+    if (userInput == "s"):
+        savePassword()
+    elif(userInput == "r"):
+        readPassword()
+    elif(userInput == "d"):
+        deletePassword()
 # password protection
 
 
