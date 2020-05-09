@@ -55,6 +55,7 @@ def savePassword():
         print("Password successfully stored")
     else:
         # irregular path: starts over
+        print("Passwords do not match")
         serviceFile.close()
         passwordFile.close()
         savePassword()
