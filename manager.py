@@ -3,8 +3,33 @@
 
 def readPassword():
     # get the name of the password
-    # serviceFile = open("serviceFile.txt", "r")
-    # passToFind = input("Which password do you want to obtain?")
+    serviceFile = open("serviceFile.txt", "r")
+    passwordFile = open("passwordFile.txt", "r")
+    servToFind = input("Which password do you want to obtain?")
+    # create a list to store all the services
+    serviceList = []
+    serviceListCap = 0
+    # create a list to store all the passwords
+    passwordList = []
+    # assign each line of the file to a list
+    for line in serviceFile:
+        lines = line.strip()
+        serviceList.append(lines)
+        serviceListCap += 1
+    # assign each line of the password file to a list
+    for line in passwordFile:
+        pLines = line.strip()
+        passwordList.append(pLines)
+    # while there are still slots left to check in the lists
+    while (serviceListCap > 0):
+        # decrement servicelistcap
+        serviceListCap -= 1
+        # if a slot of the list is the correct service
+        if(serviceList[serviceListCap] == servToFind):
+            # print out the equivilant in the password list
+            print(passwordList[serviceListCap])
+    serviceFile.close()
+    passwordFile.close()
 
 
 def savePassword():
@@ -17,12 +42,12 @@ def savePassword():
     passwordValue2 = input("Confirm your password:")
     if (passwordValue1 == passwordValue2):
         # nomial path: saves the service name in one file
-        serviceFile.write(serviceName)
+        serviceFile.write(serviceName + '\n')
         # saves the password in the other file
-        passwordFile.write(passwordValue1)
+        passwordFile.write(passwordValue1 + '\n')
         # resets variables to empty strings
         passwordValue1 = ''
-        passwrodValue2 = ''
+        passwordValue2 = ''
         # close both files
         serviceFile.close()
         passwordFile.close()
@@ -35,22 +60,23 @@ def savePassword():
         savePassword()
 
 
-def deletePassword():
-    # get name of the password
-    print("delet")
-
 # password access - only called if the user passes the getPassword function.
 
 
 def accessPasswords():
     userInput = input(
-        "Would you like to store (s) a password, read (r) a password, or remove (d) a password from the system?")
+        "Would you like to store (s) a password, read (r) a password, or quit (q) the program?")
     if (userInput == "s"):
         savePassword()
     elif(userInput == "r"):
         readPassword()
-    elif(userInput == "d"):
-        deletePassword()
+    elif(userInput == "q"):
+        quit()
+    else:
+        print("Please enter either s, r, or q")
+    accessPasswords()
+
+
 # password protection
 
 
