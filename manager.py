@@ -1,6 +1,31 @@
 # password manager
 from cryptography.fernet import Fernet
 
+# Generate a new key and encrypt the file with it
+
+
+def encrypt():
+    key = Fernet.generate_key()
+    with open("key.key", "wb") as keyF:
+        keyF.write(key)
+    crypto_suite = Fernet(key)
+    with open("passwordFile.txt", "rb") as passFile:
+        plain = passFile.read()
+    encrypted = crypto_suite.encrypt(plain)
+    with open("passwordFile.txt", "wb") as encryptPass:
+        encryptPass.write(encrypted)
+
+
+def decrypt():
+    with open("key.key", "rb") as keyFile:
+        key = keyFile.read()
+    crypto_suite = Fernet(key)
+    with open("passwordFile.txt", "rb") as enPassFile:
+        encrypted = enPassFile.read()
+    plainText = crypto_suite.decrypt(encrypted)
+    with open("passwordFile.txt", "wb") as dePassFile:
+        dePassFile.write(plainText)
+
 
 def readPassword():
     # get the name of the password
@@ -124,4 +149,5 @@ def getPassword():
 
 
 # start the program with the getPassword function
+
 getPassword()
