@@ -1,36 +1,12 @@
 # password manager
-from cryptography.fernet import Fernet
 
-# Generate a new key and encrypt the file with it
-
-
-def encrypt():
-    key = Fernet.generate_key()
-    with open("key.key", "wb") as keyF:
-        keyF.write(key)
-    crypto_suite = Fernet(key)
-    with open("passwordFile.txt", "rb") as passFile:
-        plain = passFile.read()
-    encrypted = crypto_suite.encrypt(plain)
-    with open("passwordFile.txt", "wb") as encryptPass:
-        encryptPass.write(encrypted)
-
-
-def decrypt():
-    with open("key.key", "rb") as keyFile:
-        key = keyFile.read()
-    crypto_suite = Fernet(key)
-    with open("passwordFile.txt", "rb") as enPassFile:
-        encrypted = enPassFile.read()
-    plainText = crypto_suite.decrypt(encrypted)
-    with open("passwordFile.txt", "wb") as dePassFile:
-        dePassFile.write(plainText)
+# input a service, get password
 
 
 def readPassword():
     # get the name of the password
-    serviceFile = open("serviceFile.txt", "r")
-    passwordFile = open("passwordFile.txt", "r")
+    serviceFile = open("serviceFile.txt", "rb")
+    passwordFile = open("passwordFile.txt", "rb")
     servToFind = input("Which password do you want to obtain?")
     # create a list to store all the services
     serviceList = []
@@ -41,10 +17,12 @@ def readPassword():
     for line in serviceFile:
         lines = line.strip()
         serviceList.append(lines)
+        print(lines)
         serviceListCap += 1
     # assign each line of the password file to a list
     for line in passwordFile:
         pLines = line.strip()
+        print(pLines)
         passwordList.append(pLines)
     # while there are still slots left to check in the lists
     while (serviceListCap > 0):
@@ -56,6 +34,9 @@ def readPassword():
             print(passwordList[serviceListCap])
     serviceFile.close()
     passwordFile.close()
+
+
+# save passwords in two seperate files
 
 
 def savePassword():
@@ -108,6 +89,7 @@ def accessPasswords():
 
 
 def getPassword():
+
     # open file containing master password
     masterPasswordFile = open(
         "masterPassword.txt", "r")
@@ -149,5 +131,4 @@ def getPassword():
 
 
 # start the program with the getPassword function
-
 getPassword()
