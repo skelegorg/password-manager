@@ -17,12 +17,10 @@ def readPassword():
     for line in serviceFile:
         lines = line.strip()
         serviceList.append(lines)
-        print(lines)
         serviceListCap += 1
     # assign each line of the password file to a list
     for line in passwordFile:
         pLines = line.strip()
-        print(pLines)
         passwordList.append(pLines)
     # while there are still slots left to check in the lists
     while (serviceListCap > 0):
