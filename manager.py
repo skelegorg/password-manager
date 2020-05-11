@@ -1,4 +1,5 @@
 # password manager
+from cryptography.fernet import Fernet
 
 
 def readPassword():
