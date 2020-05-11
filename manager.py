@@ -5,8 +5,8 @@
 
 def readPassword():
     # get the name of the password
-    serviceFile = open("serviceFile.txt", "rb")
-    passwordFile = open("passwordFile.txt", "rb")
+    serviceFile = open("serviceFile.txt", "r")
+    passwordFile = open("passwordFile.txt", "r")
     servToFind = input("Which password do you want to obtain?")
     # create a list to store all the services
     serviceList = []
