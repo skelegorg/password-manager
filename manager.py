@@ -1,6 +1,61 @@
 # password manager
+import secrets
 
-# input a service, get password
+
+def generateKey():
+    # Generate a couple random numbers and save them on different lines
+    keyFile = open("key.key", "a")
+    loopHelper = 0
+    while(loopHelper < 5):
+        keyFile.write(str(secrets.randbelow(5)) + '\n')
+        loopHelper += 1
+
+
+def encryptData():
+    # Open files
+    keyFile = open("key.key", "r")
+    passFile = open("passwordFile.txt", "r")
+    if(keyFile.read() != ''):
+        # Nomial path:
+        print("Duplicating data...")
+        # Saves the unencrypted password file
+        passArray = []
+        for line in passFile:
+            currentLine = line.strip()
+            passArray.append(currentLine)
+        print("Encrypting data...")
+        passFile.close()
+        passFile = open("passwordFile.txt", "w")
+        passFile.close()
+        elemLoopHelper = 0
+        polyNumPicker = 0
+        for element in passArray:
+            encryptedLine = ''
+            for char in passArray[elemLoopHelper]:
+                # Figure out which element of the key is being added
+                # Go through key values and add them to each
+                # Add each newly encrypted character to the encryptedLine string
+                # Change the line being read by the polyNumAdd
+            print("Saving data...")
+            passArray[elemLoopHelper] = encryptedLine
+            # Change the slot of the array that is being encrypted
+            elemLoopHelper += 1
+            print("Saved data")
+        print(passArray)
+        with open("passwordFile.txt", "a") as pwf:
+            for element in passArray:
+                pwf.writelines(element + '\n')
+
+    else:
+        # No key, so generate one
+        generateKey()
+        encryptData()
+
+
+def decryptData():
+    # Open files
+    # input a service, get password
+    print("trying to decrypt")
 
 
 def readPassword():
@@ -129,4 +184,5 @@ def getPassword():
 
 
 # start the program with the getPassword function
-getPassword()
+# getPassword()
+encryptData()
