@@ -1,6 +1,13 @@
 # password manager
 import secrets
 
+def listServ():
+    # list out all stored passwords
+    servFile = open("serviceFile.txt", "r")
+    for line in servFile:
+        currentLine = line.strip()
+        print(currentLine)
+
 
 def generateKey():
     # Generate a couple random numbers and save them on different lines
@@ -191,7 +198,7 @@ def savePassword():
 
 def accessPasswords():
     userInput = input(
-        "Would you like to store (s) a password, read (r) a password, or quit (q) the program?")
+        "Would you like to store (s) a password, read (r) a password, or quit (q) the program? type (h) for more information.")
     if (userInput == "s"):
         savePassword()
     elif(userInput == "r"):
@@ -199,6 +206,10 @@ def accessPasswords():
     elif(userInput == "q"):
         encryptData()
         quit()
+    elif(userInput == "l"):
+        listServ()
+    elif(userInput == "help"):
+        print("help: to store a password, input \'s\'. to read a password, input \'r\'. to quit the program, input \'l\'. to list all passwords stored, type \'l\'.")
     else:
         print("Please enter either s, r, or q")
     accessPasswords()
