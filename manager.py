@@ -37,7 +37,6 @@ def encryptData():
                 keyLine = line.strip()
                 keyArray.append(keyLine)
         print("Saving data...")
-        print(passArray)
         # for each line in the password file
         for element in passArray:
             # Reset/create a string which holds the current encrypted line
@@ -59,7 +58,6 @@ def encryptData():
             passArray[elemLoopHelper] = encryptedLine
             # Change the slot of the array that is being encrypted
             elemLoopHelper += 1
-        print(passArray)
         with open("passwordFile.txt", "a") as pwf:
             for element in passArray:
                 pwf.writelines(element + '\n')
@@ -72,8 +70,57 @@ def encryptData():
 
 def decryptData():
     # Open files
-    # input a service, get password
-    print("trying to decrypt")
+    keyFile = open("key.txt", "r")
+    passFile = open("passwordFile.txt", "r")
+    if(keyFile.read() != ''):
+        keyFile.close()
+        # Nomial path:
+        print("Duplicating data...")
+        # Saves the unencrypted password file
+        passArray = []
+        for line in passFile:
+            currentLine = line.strip()
+            passArray.append(currentLine)
+        print("Decrypting data...")
+        passFile.close()
+        passFile = open("passwordFile.txt", "w")
+        passFile.close()
+        elemLoopHelper = 0
+        keyArray = []
+        keySwitcher = 0
+        # Populate the keyArray with all 5 digits of the key
+        with open("key.txt", "r") as keyFile:
+            for line in keyFile:
+                keyLine = line.strip()
+                keyArray.append(keyLine)
+        print("Saving data...")
+        # for each line in the password file
+        for element in passArray:
+            # Reset/create a string which holds the current encrypted line
+            decryptedLine = ''
+            # For each character in each line of the password file
+            for char in passArray[elemLoopHelper]:
+                # Figure out which element of the key is being added
+                polyAdd = int(keyArray[keySwitcher])
+                # Go through key values and add them to each
+                deChar = ord(char) - polyAdd
+                # Convert enChar to enCharS
+                deCharS = chr(deChar)
+                # Add each newly encrypted character to the encryptedLine string
+                decryptedLine += deCharS
+                # Change the line being read by the polyNumAdd
+                keySwitcher += 1
+                if (keySwitcher == 5):
+                    keySwitcher = 0
+            passArray[elemLoopHelper] = decryptedLine
+            # Change the slot of the array that is being encrypted
+            elemLoopHelper += 1
+        with open("passwordFile.txt", "a") as pwf:
+            for element in passArray:
+                pwf.writelines(element + '\n')
+        print("Decrypted data")
+    else:
+        print("Key not detected")
 
 
 def readPassword():
@@ -150,6 +197,7 @@ def accessPasswords():
     elif(userInput == "r"):
         readPassword()
     elif(userInput == "q"):
+        encryptData()
         quit()
     else:
         print("Please enter either s, r, or q")
@@ -162,6 +210,7 @@ def accessPasswords():
 def getPassword():
 
     # open file containing master password
+    decryptData()
     masterPasswordFile = open(
         "masterPassword.txt", "r")
     # saves the password temporarily
@@ -198,9 +247,9 @@ def getPassword():
         else:
             # if the passwords do not match, inform the user and have the user start over.
             print("The passwords do not match")
+            encryptData()
             getPassword()
 
 
 # start the program with the getPassword function
-# getPassword()
-encryptData()
+getPassword()
