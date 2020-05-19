@@ -26,13 +26,11 @@ def encryptData():
     if(keyFile.read() != ''):
         keyFile.close()
         # Nomial path:
-        print("Duplicating data...")
         # Saves the unencrypted password file
         passArray = []
         for line in passFile:
             currentLine = line.strip()
             passArray.append(currentLine)
-        print("Encrypting data...")
         passFile.close()
         passFile = open("passwordFile.txt", "w")
         passFile.close()
@@ -44,7 +42,6 @@ def encryptData():
             for line in keyFile:
                 keyLine = line.strip()
                 keyArray.append(keyLine)
-        print("Saving data...")
         # for each line in the password file
         for element in passArray:
             # Reset/create a string which holds the current encrypted line
@@ -69,7 +66,7 @@ def encryptData():
         with open("passwordFile.txt", "a") as pwf:
             for element in passArray:
                 pwf.writelines(element + '\n')
-        print("Saved data")
+        print("Encrypted data")
     else:
         # No key, so generate one
         generateKey()
@@ -83,13 +80,11 @@ def decryptData():
     if(keyFile.read() != ''):
         keyFile.close()
         # Nomial path:
-        print("Duplicating data...")
         # Saves the unencrypted password file
         passArray = []
         for line in passFile:
             currentLine = line.strip()
             passArray.append(currentLine)
-        print("Decrypting data...")
         passFile.close()
         passFile = open("passwordFile.txt", "w")
         passFile.close()
@@ -101,7 +96,6 @@ def decryptData():
             for line in keyFile:
                 keyLine = line.strip()
                 keyArray.append(keyLine)
-        print("Saving data...")
         # for each line in the password file
         for element in passArray:
             # Reset/create a string which holds the current encrypted line
@@ -131,11 +125,11 @@ def decryptData():
         print("Key not detected")
 
 
-def readPassword():
+def readPassword(service):
     # get the name of the password
     serviceFile = open("serviceFile.txt", "r")
     passwordFile = open("passwordFile.txt", "r")
-    servToFind = input("Which password do you want to obtain?")
+    servToFind = service
     # create a list to store all the services
     serviceList = []
     serviceListCap = 0
@@ -157,7 +151,7 @@ def readPassword():
         # if a slot of the list is the correct service
         if(serviceList[serviceListCap] == servToFind):
             # print out the equivilant in the password list
-            print(passwordList[serviceListCap])
+            return(passwordList[serviceListCap])
     serviceFile.close()
     passwordFile.close()
 
@@ -176,6 +170,7 @@ def savePassword():
     if (passwordValue1 == passwordValue2):
         # nomial path: saves the service name in one file
         serviceFile.write(serviceName + '\n')
+        print("saved service " + serviceName)
         # saves the password in the other file
         passwordFile.write(passwordValue1 + '\n')
         # resets variables to empty strings
@@ -203,7 +198,8 @@ def accessPasswords():
     if (userInput == "s"):
         savePassword()
     elif(userInput == "r"):
-        readPassword()
+        servToFindP = input("What password are you trying to retrieve?")
+        print(readPassword(servToFindP))
     elif(userInput == "q"):
         encryptData()
         quit()
@@ -220,16 +216,11 @@ def accessPasswords():
 
 
 def getPassword():
-
     # open file containing master password
     decryptData()
-    masterPasswordFile = open(
-        "masterPassword.txt", "r")
-    # saves the password temporarily
-    masterPass = masterPasswordFile.read()
-    masterPasswordFile.close()
+    masterPass = readPassword("master")
     # check if the password file is empty
-    if (masterPass != ''):
+    if (masterPass != None):
         # if the master password is not empty, get user to input the master password
         masterPassInput = input("Enter your master password:")
         # if the entered password matches the password in the master
@@ -240,20 +231,24 @@ def getPassword():
             # tell user that their password is incorrect
             print("Password incorrect")
             # go back to the start of the getPassword function
+            encryptData()
             getPassword()
     else:
         # password does not exist, so create a password
         # open the password file up in write mode
-        masterPasswordFile = open(
-            "masterPassword.txt", "w")
+        passwordFile = open(
+            "passwordFile.txt", "w")
+        servFile = open("serviceFile.txt", "w")
         # get the user to input their password 2x for security
         newPass1 = input("What would you like your password to be?\n")
         newPass2 = input("Confirm your password:")
         # check if the password is the same both times
         if(newPass1 == newPass2):
             # save the new password in the file
-            masterPasswordFile.write(newPass1)
-            masterPasswordFile.close()
+            servFile.write("master" + '\n')
+            servFile.close()
+            passwordFile.write(newPass1)
+            passwordFile.close()
             # begin the program
             accessPasswords()
         else:
