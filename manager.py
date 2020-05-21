@@ -2,6 +2,36 @@
 import secrets
 
 
+# sets up master password recovery
+
+
+def recoverSetup():
+    with open("recover.txt", "w") as file:
+        que = input("What would you like your recovery question to be?")
+        check = input("Are you sure? (enter \'y\' or \'n\')")
+        if(check == "y"):
+            file.write(que)
+        elif(check == "n"):
+            recoverSetup()
+        else:
+            recoverSetup()
+        ans = input("What is the answer to your question?")
+        checka = input("Are you sure? (enter \'y\' or \'n\')")
+        if(checka == "y"):
+            with open("serviceFile.txt", "a") as sfile:
+                sfile.write("mrecovery" + '\n')
+            with open("passwordFile.txt", "a") as pfile:
+                pfile.write(ans + '\n')
+        elif(checka == "n"):
+            recoverSetup()
+        else:
+            print("please enter \'y\' or \'n\'.")
+            recoverSetup()
+
+
+# lists all services stored in the manager
+
+
 def listServ():
     # list out all stored passwords
     servFile = open("serviceFile.txt", "r")
@@ -10,13 +40,20 @@ def listServ():
         print(currentLine)
 
 
+# generates a new key - called every time the program quits
+
+
 def generateKey():
     # Generate a couple random numbers and save them on different lines
-    keyFile = open("key.txt", "a")
+    keyFile = open("key.txt", "w")
     loopHelper = 0
     while(loopHelper < 5):
         keyFile.write(str(secrets.randbelow(7)) + '\n')
         loopHelper += 1
+    print("Key exchanged")
+
+
+# encrypts the data with the key in key.txt
 
 
 def encryptData():
@@ -73,6 +110,9 @@ def encryptData():
         encryptData()
 
 
+# decrypts the data with the same key used to encrypt the data
+
+
 def decryptData():
     # Open files
     keyFile = open("key.txt", "r")
@@ -123,6 +163,9 @@ def decryptData():
         print("Decrypted data")
     else:
         print("Key not detected")
+
+
+# returns the password belonging to the service parameter - if none found, returns None
 
 
 def readPassword(service):
@@ -201,12 +244,16 @@ def accessPasswords():
         servToFindP = input("What password are you trying to retrieve?")
         print(readPassword(servToFindP))
     elif(userInput == "q"):
+        generateKey()
         encryptData()
         quit()
     elif(userInput == "l"):
         listServ()
+    elif(userInput == "recover"):
+        encryptData()
+        print("attempted to restore data")
     elif(userInput == "help"):
-        print("help: to store a password, input \'s\'. to read a password, input \'r\'. to quit the program, input \'q\'. to list all passwords stored, type \'l\'.")
+        print("help: to store a password, input \'s\'. to read a password, input \'r\'. to quit the program, input \'q\'. to list all passwords stored, type \'l\'. to restore data from force quits, input \'recover\'.")
     else:
         print("Please enter either s, r, q, or help.")
     accessPasswords()
@@ -227,9 +274,22 @@ def getPassword():
         if (masterPassInput == masterPass):
             # begin the normal program
             accessPasswords()
+        elif(masterPassInput == "recover"):
+            with open("recover.txt", "r") as rec:
+                question = rec.read()
+            answer = input(question)
+            if(answer == readPassword("mrecovery")):
+                print("Your master password is: " + readPassword("master"))
+                encryptData()
+                getPassword()
+            else:
+                print("Incorrect.")
+                encryptData()
+                getPassword()
         else:
             # tell user that their password is incorrect
-            print("Password incorrect")
+            print(
+                "Password incorrect. If you have forgotten your master password, type \'recover\'.")
             # go back to the start of the getPassword function
             encryptData()
             getPassword()
@@ -247,8 +307,9 @@ def getPassword():
             # save the new password in the file
             servFile.write("master" + '\n')
             servFile.close()
-            passwordFile.write(newPass1)
+            passwordFile.write(newPass1 + '\n')
             passwordFile.close()
+            recoverSetup()
             # begin the program
             accessPasswords()
         else:
