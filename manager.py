@@ -1,5 +1,26 @@
 # password manager
 import secrets
+import string
+import random
+
+
+# generates a secure random password with numbers and symbols and characters
+
+
+def randomPassword():
+    randomSource = string.ascii_letters + string.digits + string.punctuation
+    password = random.choice(string.ascii_lowercase)
+    password += random.choice(string.ascii_uppercase)
+    password += random.choice(string.digits)
+    password += random.choice(string.punctuation)
+
+    for i in range(10):
+        password += random.choice(randomSource)
+
+    passwordList = list(password)
+    random.SystemRandom().shuffle(passwordList)
+    password = ''.join(passwordList)
+    return password
 
 
 # sets up master password recovery
@@ -208,28 +229,44 @@ def savePassword():
     passwordFile = open("passwordFile.txt", "a")
     # get the name and value of the password
     serviceName = input("What is the service?")
-    passwordValue1 = input("What is your password?")
-    passwordValue2 = input("Confirm your password:")
-    if (passwordValue1 == passwordValue2):
-        # nomial path: saves the service name in one file
+    choice = input(
+        "Would you like to enter a password or generate one randomly? (input \'generate\' or \'enter\')")
+    if(choice == "enter"):
+        passwordValue1 = input("What is your password?")
+        passwordValue2 = input("Confirm your password:")
+        if (passwordValue1 == passwordValue2):
+            # nomial path: saves the service name in one file
+            serviceFile.write(serviceName + '\n')
+            print("saved service " + serviceName)
+            # saves the password in the other file
+            passwordFile.write(passwordValue1 + '\n')
+            # resets variables to empty strings
+            passwordValue1 = ''
+            passwordValue2 = ''
+            # close both files
+            serviceFile.close()
+            passwordFile.close()
+            # print success message
+            print("Password successfully stored")
+        else:
+            # irregular path: starts over
+            print("Passwords do not match")
+            serviceFile.close()
+            passwordFile.close()
+            savePassword()
+    elif(choice == "generate"):
         serviceFile.write(serviceName + '\n')
         print("saved service " + serviceName)
         # saves the password in the other file
-        passwordFile.write(passwordValue1 + '\n')
-        # resets variables to empty strings
-        passwordValue1 = ''
-        passwordValue2 = ''
+        newPass = randomPassword()
+        passwordFile.write(newPass + '\n')
         # close both files
         serviceFile.close()
         passwordFile.close()
         # print success message
-        print("Password successfully stored")
+        print("Password successfully stored: " + newPass)
     else:
-        # irregular path: starts over
-        print("Passwords do not match")
-        serviceFile.close()
-        passwordFile.close()
-        savePassword()
+        print("Please enter either \'enter\' or \'generate\'.")
 
 
 # password access - only called if the user passes the getPassword function.
